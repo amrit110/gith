@@ -39,14 +39,14 @@ cargo build --release
 
 ## Quick Start
 
-**Start fresh** - Initialize a new Git repository:
+**Start fresh** - Initialize a new Git repository with gith tracking:
 ```bash
-gith init
+gith init --gith
 ```
 
 **Add to existing** - Enable gith tracking in your current repo:
 ```bash
-gith gith-init
+gith init-tracking
 ```
 
 **Make your first human-certified commit**:
@@ -74,13 +74,18 @@ Common options:
 
 ---
 
-**`gith gith-init`**
+**`gith init-tracking`**
 Enable gith tracking in an existing Git repository
 
 Creates:
 - `.gith/` directory for metadata
 - `human_manifest.json` for tracking flags
 - Updates `.gitignore` appropriately
+
+**`gith init --gith [DIRECTORY]`**
+Initialize a new Git repository with gith tracking enabled
+
+Combines `git init` functionality with automatic gith tracking setup
 
 ---
 

@@ -29,13 +29,14 @@ fn main() -> Result<()> {
             template,
             separate_git_dir,
             quiet,
+            gith,
         } => {
             // For git init, we don't need GitWrapper since there's no repo yet
             // Forward to git init with all the same arguments
             let mut git_args = vec!["init".to_string()];
 
-            if let Some(dir) = directory {
-                git_args.push(dir);
+            if let Some(ref dir) = directory {
+                git_args.push(dir.clone());
             }
             if bare {
                 git_args.push("--bare".to_string());
@@ -74,9 +75,22 @@ fn main() -> Result<()> {
                     status.code().unwrap_or(-1)
                 )));
             }
+
+            // If --gith flag is provided, also initialize gith tracking
+            if gith {
+                // Change to the initialized directory if one was specified
+                if let Some(ref dir) = directory {
+                    std::env::set_current_dir(dir)?;
+                }
+
+                let manifest_manager = ManifestManager::new()?;
+                println!("Initializing gith tracking in repository...");
+                manifest_manager.init()?;
+                println!("Gith tracking initialized successfully!");
+            }
         }
 
-        Commands::GithInit => {
+        Commands::InitTracking => {
             let manifest_manager = ManifestManager::new()?;
             println!("Initializing gith tracking in current repository...");
             manifest_manager.init()?;
@@ -163,7 +177,7 @@ fn main() -> Result<()> {
                 }
 
                 // These cases are handled above
-                Commands::Init { .. } | Commands::GithInit => unreachable!(),
+                Commands::Init { .. } | Commands::InitTracking => unreachable!(),
             }
         }
     }
@@ -176,7 +190,7 @@ fn is_gith_command(arg: &str) -> bool {
     matches!(
         arg,
         "init"
-            | "gith-init"
+            | "init-tracking"
             | "add"
             | "commit"
             | "list-human"

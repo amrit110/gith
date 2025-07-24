@@ -36,10 +36,13 @@ pub enum Commands {
         /// Be quiet
         #[arg(short, long)]
         quiet: bool,
+        /// Also initialize gith tracking in the repository
+        #[arg(long)]
+        gith: bool,
     },
 
-    /// Initialize gith tracking in the current repository
-    GithInit,
+    /// Initialize gith tracking in an existing repository
+    InitTracking,
 
     /// Add files to the staging area (mirrors git add)
     Add {
