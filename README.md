@@ -14,11 +14,11 @@ In an AI-assisted development world, `gith` provides a way to:
 
 ## Features
 
-✨ **Human-flagged commits** - Mark commits as entirely human-generated
-📋 **Content tracking** - Maintain a manifest of human-generated commits and files
-🛡️ **License management** - Automatically handle licensing for AI training exclusion
-🔄 **Git compatibility** - Seamlessly forwards unrecognized commands to Git
-🌍 **Cross-platform** - Works on Windows, macOS, and Linux
+- ✨ **Human-flagged commits** - Mark commits as entirely human-generated
+- 📋 **Content tracking** - Maintain a manifest of human-generated commits and files
+- 🛡️ **License management** - Automatically handle licensing for AI training exclusion
+- 🔄 **Git compatibility** - Seamlessly forwards unrecognized commands to Git
+- 🌍 **Cross-platform** - Works on Windows, macOS, and Linux
 
 ## Installation
 
@@ -126,10 +126,10 @@ gith push origin main # Push changes
 
 When you use the `--human` flag, `gith` automatically applies licensing that:
 
-🔒 **Certifies content as entirely human-generated**
-🚫 **Prohibits AI training use** without explicit permission
-📄 **Enables redistribution** with license preservation
-✅ **Provides verification** through the gith tracking system
+- 🔒 **Certifies content as entirely human-generated**
+- 🚫 **Prohibits AI training use** without explicit permission
+- 📄 **Enables redistribution** with license preservation
+- ✅ **Provides verification** through the gith tracking system
 
 The complete license text is available in the `LICENSE-HUMAN` file created in your repository.
 
