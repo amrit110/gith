@@ -69,9 +69,9 @@ impl LicenseManager {
         let notice = "This file contains human-generated content. See LICENSE-HUMAN for terms.";
 
         match comment_style {
-            CommentStyle::SlashSlash => format!("// {}\n", notice),
-            CommentStyle::Hash => format!("# {}\n", notice),
-            CommentStyle::SlashStar => format!("/* {} */\n", notice),
+            CommentStyle::SlashSlash => format!("// {notice}\n"),
+            CommentStyle::Hash => format!("# {notice}\n"),
+            CommentStyle::SlashStar => format!("/* {notice} */\n"),
         }
     }
 

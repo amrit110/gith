@@ -207,14 +207,14 @@ impl ManifestManager {
             }
 
             let new_content = if content.ends_with('\n') {
-                format!("{}{}\n", content, gith_entry)
+                format!("{content}{gith_entry}\n")
             } else {
-                format!("{}\n{}\n", content, gith_entry)
+                format!("{content}\n{gith_entry}\n")
             };
 
             fs::write(gitignore_path, new_content)?;
         } else {
-            fs::write(gitignore_path, format!("{}\n", gith_entry))?;
+            fs::write(gitignore_path, format!("{gith_entry}\n"))?;
         }
 
         Ok(())

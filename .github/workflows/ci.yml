@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - .github/workflows/code_checks.yml
+      - '**.md'
       - '**.rs'
       - Cargo.lock
       - Cargo.toml
@@ -19,6 +20,7 @@ on:
       - main
     paths:
       - .github/workflows/code_checks.yml
+      - '**.md'
       - '**.rs'
       - Cargo.lock
       - Cargo.toml

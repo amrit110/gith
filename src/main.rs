@@ -121,9 +121,9 @@ fn main() -> Result<()> {
 
                     if human {
                         manifest_manager.add_human_commit(&commit_hash)?;
-                        println!("Human-flagged commit created: {}", commit_hash);
+                        println!("Human-flagged commit created: {commit_hash}");
                     } else {
-                        println!("Commit created: {}", commit_hash);
+                        println!("Commit created: {commit_hash}");
                     }
                 }
 
@@ -136,7 +136,7 @@ fn main() -> Result<()> {
                     if !commits_only && !human_data.files.is_empty() {
                         println!("Human-flagged files:");
                         for file in &human_data.files {
-                            println!("  {}", file);
+                            println!("  {file}");
                         }
                     }
 
