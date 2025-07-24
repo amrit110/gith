@@ -22,12 +22,12 @@ pub enum GithError {
 impl fmt::Display for GithError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            GithError::GitError(msg) => write!(f, "Git error: {}", msg),
-            GithError::IoError(err) => write!(f, "IO error: {}", err),
-            GithError::JsonError(err) => write!(f, "JSON error: {}", err),
+            GithError::GitError(msg) => write!(f, "Git error: {msg}"),
+            GithError::IoError(err) => write!(f, "IO error: {err}"),
+            GithError::JsonError(err) => write!(f, "JSON error: {err}"),
             GithError::NotARepository => write!(f, "Not a git repository"),
-            GithError::ConfigError(msg) => write!(f, "Configuration error: {}", msg),
-            GithError::Other(msg) => write!(f, "{}", msg),
+            GithError::ConfigError(msg) => write!(f, "Configuration error: {msg}"),
+            GithError::Other(msg) => write!(f, "{msg}"),
         }
     }
 }

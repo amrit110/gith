@@ -43,12 +43,9 @@ impl GitWrapper {
     }
 
     /// Create a commit with optional human flag
-    pub fn commit(&self, message: &str, human: bool, allow_empty: bool) -> Result<String> {
+    pub fn commit(&self, message: &str, human: bool, _allow_empty: bool) -> Result<String> {
         let enhanced_message = if human {
-            format!(
-                "{}\n\nHuman-Flag: true\nLicense: HUMAN-GENERATED, NO AI TRAINING",
-                message
-            )
+            format!("{message}\n\nHuman-Flag: true\nLicense: HUMAN-GENERATED, NO AI TRAINING")
         } else {
             message.to_string()
         };
@@ -67,11 +64,7 @@ impl GitWrapper {
             Err(_) => None, // First commit
         };
 
-        let parents: Vec<&git2::Commit> = if allow_empty {
-            parent_commit.iter().collect()
-        } else {
-            parent_commit.iter().collect()
-        };
+        let parents: Vec<&git2::Commit> = parent_commit.iter().collect();
         let commit_id = self.repo.commit(
             Some("HEAD"),
             &signature,
