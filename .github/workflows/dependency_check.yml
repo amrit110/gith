@@ -1,0 +1,42 @@
+name: dependency checks
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/dependency_check.yml'
+      - '**.rs'
+      - Cargo.lock
+      - Cargo.toml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/dependency_check.yml'
+      - '**.rs'
+      - Cargo.lock
+      - Cargo.toml
+
+  schedule:
+    - cron: '0 0 * * 0'  # Run weekly on Sundays at midnight
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  check-rust-dependencies:
+    name: Check Rust Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install cargo-outdated
+        run: cargo install cargo-outdated
+
+      - name: Check for outdated dependencies
+        run: cargo outdated --exit-code 1
