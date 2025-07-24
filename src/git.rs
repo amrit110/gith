@@ -62,17 +62,16 @@ impl GitWrapper {
         };
         let tree = self.repo.find_tree(tree_id)?;
 
-        let parent_commit = if allow_empty {
-            None
-        } else {
-            match self.repo.head() {
-                Ok(head) => Some(head.peel_to_commit()?),
-                Err(_) => None, // First commit
-            }
+        let parent_commit = match self.repo.head() {
+            Ok(head) => Some(head.peel_to_commit()?),
+            Err(_) => None, // First commit
         };
 
-        let parents: Vec<&git2::Commit> = parent_commit.iter().collect();
-
+        let parents: Vec<&git2::Commit> = if allow_empty {
+            parent_commit.iter().collect()
+        } else {
+            parent_commit.iter().collect()
+        };
         let commit_id = self.repo.commit(
             Some("HEAD"),
             &signature,
