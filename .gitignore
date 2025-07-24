@@ -1,0 +1,16 @@
+target
+docs/book
+.env
+**node_modules
+ui/dist
+ui/.next
+ui/.cache
+**/.turbo
+**/dist
+**/.DS_Store
+**/.vscode
+**/.idea
+.cargo
+Cargo.lock
+*.log
+benchmark_results

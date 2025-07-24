@@ -1,0 +1,118 @@
+name: Code checks
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/code_checks.yml
+      - '**.rs'
+      - Cargo.lock
+      - Cargo.toml
+      - '.pre-commit-config.yaml'
+      - 'pyproject.toml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/code_checks.yml
+      - '**.rs'
+      - Cargo.lock
+      - Cargo.toml
+      - '.pre-commit-config.yaml'
+      - 'pyproject.toml'
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+        with:
+          version: "0.6.14"
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install Python dependencies
+        run: uv sync
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run pre-commit hooks
+        run: |
+          source .venv/bin/activate
+          pre-commit run --all-files
+
+      - name: Check build
+        run: cargo check --all-features
+
+  test:
+    name: Coverage Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: llvm-tools-preview
+
+      - name: Install llvm-cov
+        run: cargo install cargo-llvm-cov
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Generate Coverage
+        env:
+          SKIP_INTEGRATION: "true"
+        run: |
+          cargo llvm-cov --verbose \
+            --all-features \
+            --workspace \
+            --lcov \
+            --output-path lcov.info
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: lcov.info
+          verbose: true
