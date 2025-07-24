@@ -45,11 +45,52 @@ fn test_git_init_compatibility() {
 }
 
 #[test]
-fn test_gith_init() {
+fn test_init_with_gith_flag() {
+    let temp_dir = TempDir::new().expect("Failed to create temp directory");
+
+    // Test that gith init --gith works like git init but also initializes gith tracking
+    let mut cmd = Command::cargo_bin("gith").unwrap();
+    cmd.args(["init", "--gith"])
+        .current_dir(&temp_dir)
+        .assert()
+        .success()
+        .stdout(predicate::str::contains(
+            "Gith tracking initialized successfully!",
+        ));
+
+    // Check that both .git and .gith directories were created
+    assert!(temp_dir.path().join(".git").exists());
+    assert!(temp_dir.path().join(".gith").exists());
+    assert!(temp_dir.path().join(".gith/human_manifest.json").exists());
+}
+
+#[test]
+fn test_init_with_gith_flag_in_directory() {
+    let temp_dir = TempDir::new().expect("Failed to create temp directory");
+    let project_dir = temp_dir.path().join("my-project");
+
+    // Test that gith init --gith my-project works
+    let mut cmd = Command::cargo_bin("gith").unwrap();
+    cmd.args(["init", "--gith", "my-project"])
+        .current_dir(&temp_dir)
+        .assert()
+        .success()
+        .stdout(predicate::str::contains(
+            "Gith tracking initialized successfully!",
+        ));
+
+    // Check that both .git and .gith directories were created in the project directory
+    assert!(project_dir.join(".git").exists());
+    assert!(project_dir.join(".gith").exists());
+    assert!(project_dir.join(".gith/human_manifest.json").exists());
+}
+
+#[test]
+fn test_init_tracking() {
     let temp_dir = setup_test_repo();
 
     let mut cmd = Command::cargo_bin("gith").unwrap();
-    cmd.arg("gith-init")
+    cmd.arg("init-tracking")
         .current_dir(&temp_dir)
         .assert()
         .success()
@@ -87,7 +128,7 @@ fn test_human_commit() {
     // Initialize gith tracking
     Command::cargo_bin("gith")
         .unwrap()
-        .arg("gith-init")
+        .arg("init-tracking")
         .current_dir(&temp_dir)
         .assert()
         .success();
@@ -120,7 +161,7 @@ fn test_list_human_empty() {
     // Initialize gith tracking
     Command::cargo_bin("gith")
         .unwrap()
-        .arg("gith-init")
+        .arg("init-tracking")
         .current_dir(&temp_dir)
         .assert()
         .success();
