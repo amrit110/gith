@@ -63,7 +63,7 @@ fn main() -> Result<()> {
             // Use system git command directly for init
             use std::process::{Command, Stdio};
             let mut cmd = Command::new("git");
-            cmd.args(&git_args); // Pass all args including "init"
+            cmd.args(&git_args);
             cmd.stdout(Stdio::inherit());
             cmd.stderr(Stdio::inherit());
 
