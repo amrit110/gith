@@ -11,12 +11,6 @@ on:
       - '**.rs'
       - Cargo.lock
       - Cargo.toml
-      - 'app/**.ts'
-      - 'app/**.tsx'
-      - 'app/package.json'
-      - 'app/package-lock.json'
-      - 'package.json'
-      - 'package-lock.json'
   pull_request:
     branches:
       - main
@@ -25,12 +19,6 @@ on:
       - '**.rs'
       - Cargo.lock
       - Cargo.toml
-      - 'app/**.ts'
-      - 'app/**.tsx'
-      - 'app/package.json'
-      - 'app/package-lock.json'
-      - 'package.json'
-      - 'package-lock.json'
 
   schedule:
     - cron: '0 0 * * 0'  # Run weekly on Sundays at midnight
@@ -52,23 +40,3 @@ jobs:
 
       - name: Check for outdated dependencies
         run: cargo outdated --exit-code 1
-
-  check-typescript-dependencies:
-    name: Check TypeScript Dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '23.10.0'
-          cache: 'npm'
-          cache-dependency-path: app/package-lock.json
-
-      - name: Install npm-check-updates
-        run: npm install -g npm-check-updates
-
-      - name: Check for outdated dependencies
-        working-directory: app
-        run: ncu --errorLevel 1
